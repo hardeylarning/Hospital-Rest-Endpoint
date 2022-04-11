@@ -1,5 +1,6 @@
 package com.rocktech.hospital.service;
 
+import com.rocktech.hospital.exception.PatientNotFound;
 import com.rocktech.hospital.model.Patient;
 import com.rocktech.hospital.repository.PatientRepository;
 import org.apache.commons.csv.CSVFormat;
@@ -10,26 +11,15 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 
-import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
 
 @Service
 public class PatientServiceImpl implements PatientService{
 
     @Autowired
     private PatientRepository patientRepository;
-
-//    @Override
-//    public void addPatient(Patient patient) throws ParseException {
-//        SimpleDateFormat formatter = new SimpleDateFormat(
-//                "yyyy-MM-dd");
-//        patient.setLastVisitDate(formatter.parse(formatter.format(new Date())));
-//        patientRepository.save(patient);
-//    }
 
     @Override
     public void deletePatients(Date startDate, Date endDate) {
@@ -47,11 +37,15 @@ public class PatientServiceImpl implements PatientService{
     }
 
     @Override
-    public void writePatientToCsv(Writer writer, Long id) throws IOException {
-        Patient patient = patientRepository.findById(id).get();
-
-            CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
-            csvPrinter.printRecord(patient.getId(), patient.getName(), patient.getAge(),
-                    String.valueOf(patient.getLastVisitDate()));
+    public Patient writePatientToCsv(Writer writer, Long id) throws IOException, PatientNotFound {
+        Optional<Patient> confirmPatient = patientRepository.findById(id);
+        if (!confirmPatient.isPresent()){
+            throw new PatientNotFound("No Profile Found");
+        }
+        Patient patient = confirmPatient.get();
+        CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
+        csvPrinter.printRecord(patient.getId(), patient.getName(), patient.getAge(),
+                String.valueOf(patient.getLastVisitDate()));
+        return patient;
     }
 }

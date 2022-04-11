@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
 @Entity
@@ -20,6 +22,7 @@ public class Patient {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message = "Patient's name is required")
     private String name;
 
     @Column(nullable = false)

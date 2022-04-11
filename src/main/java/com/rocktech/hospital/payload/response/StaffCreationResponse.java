@@ -1,4 +1,4 @@
-package com.rocktech.hospital.payload;
+package com.rocktech.hospital.payload.response;
 
 import lombok.*;
 
@@ -6,7 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class StaffResponse {
+public class StaffCreationResponse {
     private String message;
     private String uuid;
 }

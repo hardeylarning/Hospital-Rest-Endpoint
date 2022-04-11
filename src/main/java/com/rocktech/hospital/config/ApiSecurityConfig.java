@@ -1,11 +1,17 @@
 package com.rocktech.hospital.config;
 
+import com.rocktech.hospital.exception.AuthEntryPointJwt;
+import com.rocktech.hospital.exception.ErrorMessage;
+import com.rocktech.hospital.exception.StaffNotFound;
+import com.rocktech.hospital.exception.UUIDNotFound;
 import com.rocktech.hospital.repository.StaffRepository;
 import com.rocktech.hospital.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,26 +30,28 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
     private String requestHeader;
 
     @Autowired
+    private AuthEntryPointJwt unauthorizedHandler;
+
+    @Autowired
     private StaffService staffService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         ApiAuthKeyFilter filter = new ApiAuthKeyFilter(requestHeader);
-        filter.setAuthenticationManager(new AuthenticationManager() {
-            @Override
-            public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-                String principal = (String)  authentication.getPrincipal();
-                String uuid = staffService.uuidValue(principal);
-                if (uuid == null || !uuid.equals(principal) ){
-                    throw new BadCredentialsException("Invalid uuid");
-                }
-
-                authentication.setAuthenticated(true);
-                return authentication;
+        filter.setAuthenticationManager(authentication -> {
+            String principal = (String)  authentication.getPrincipal();
+            String uuid = staffService.uuidValue(principal);
+            if (uuid == null || !uuid.equals(principal) ){
+                throw new BadCredentialsException("Invalid uuid supplied");
             }
+            authentication.setAuthenticated(true);
+            return authentication;
         });
+
         http.csrf().disable()
                 .cors().disable()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+                .and()
                 .authorizeRequests().antMatchers( "/h2-console/**").permitAll().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

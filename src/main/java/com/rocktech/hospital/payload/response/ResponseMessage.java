@@ -1,4 +1,4 @@
-package com.rocktech.hospital.payload;
+package com.rocktech.hospital.payload.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

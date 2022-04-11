@@ -1,15 +1,14 @@
 package com.rocktech.hospital.service;
 
+import com.rocktech.hospital.exception.StaffNotFound;
 import com.rocktech.hospital.model.Staff;
-
-import java.text.ParseException;
 
 
 public interface StaffService {
 
     String uuidValue(String uuid);
 
-    void addStaff(Staff staff) throws ParseException;
+    Staff addStaff(Staff staff);
 
-    void updateStaff(Staff staff, Long staffId);
+    void updateStaff(Staff staff, Long staffId) throws StaffNotFound;
 }

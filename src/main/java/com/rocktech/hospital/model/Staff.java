@@ -4,10 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
 @Entity
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class Staff {
@@ -16,8 +19,11 @@ public class Staff {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @Column(nullable = false)
+    @NotBlank(message = "Staff name is required")
     private String name;
+
 
     @Column(nullable = false, unique = true)
     @JsonIgnoreProperties(allowGetters = true)
