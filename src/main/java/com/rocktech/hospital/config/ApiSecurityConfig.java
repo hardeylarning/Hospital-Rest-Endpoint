@@ -1,9 +1,6 @@
 package com.rocktech.hospital.config;
 
-import com.rocktech.hospital.exception.AuthEntryPointJwt;
-import com.rocktech.hospital.exception.ErrorMessage;
-import com.rocktech.hospital.exception.StaffNotFound;
-import com.rocktech.hospital.exception.UUIDNotFound;
+import com.rocktech.hospital.exception.*;
 import com.rocktech.hospital.repository.StaffRepository;
 import com.rocktech.hospital.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
@@ -36,7 +34,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
     private StaffService staffService;
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception, ForbiddenResponse {
         ApiAuthKeyFilter filter = new ApiAuthKeyFilter(requestHeader);
         filter.setAuthenticationManager(authentication -> {
             String principal = (String)  authentication.getPrincipal();

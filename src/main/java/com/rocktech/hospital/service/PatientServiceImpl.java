@@ -22,18 +22,21 @@ public class PatientServiceImpl implements PatientService{
     private PatientRepository patientRepository;
 
     @Override
-    public void deletePatients(Date startDate, Date endDate) {
+    public void deletePatients(Date startDate, Date endDate) throws PatientNotFound {
+        int result = patientRepository.countPatientByLastVisitDateBetween(startDate, endDate);
+        if (result < 1){
+            throw new PatientNotFound("No patients' record found between date range passed");
+        }
         patientRepository.deletePatientByDateRange(startDate, endDate);
     }
 
     @Override
-    public List<Patient> getPatientsByAge() {
-        return patientRepository.getPatientByAge();
-    }
-
-    @Override
-    public Optional<Patient> getPatientById(Long id) {
-        return patientRepository.findById(id);
+    public List<Patient> getPatientsByAge() throws PatientNotFound {
+        List<Patient> patients = patientRepository.getPatientByAge();
+        if (patients.size() > 1){
+            return patients;
+        }
+        throw new  PatientNotFound("No Patients' record is found with the age 2 upward");
     }
 
     @Override

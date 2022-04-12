@@ -9,7 +9,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-@ResponseStatus
 public class RestResponseException extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(StaffNotFound.class)
@@ -28,5 +27,11 @@ public class RestResponseException extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorMessage> uUIDNotFound(UUIDNotFound notFound, WebRequest request){
         ErrorMessage message = new ErrorMessage(HttpStatus.UNAUTHORIZED, notFound.getMessage(), request.getDescription(false));
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
+    }
+
+    @ExceptionHandler(ForbiddenResponse.class)
+    public ResponseEntity<ErrorMessage> forbiddenResponse(ForbiddenResponse forbiddenResponse, WebRequest request){
+        ErrorMessage message = new ErrorMessage(HttpStatus.FORBIDDEN, forbiddenResponse.getMessage(), request.getDescription(false));
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(message);
     }
 }

@@ -1,7 +1,6 @@
 package com.rocktech.hospital.repository;
 
 import com.rocktech.hospital.model.Patient;
-import com.rocktech.hospital.model.Staff;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +13,8 @@ import java.util.List;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
+
+    int countPatientByLastVisitDateBetween(Date startDate, Date lastDate);
 
     @Modifying
     @Transactional

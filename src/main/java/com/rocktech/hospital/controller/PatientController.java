@@ -19,12 +19,12 @@ public class PatientController {
     private PatientService patientService;
 
     @GetMapping("all")
-    public List<Patient> patientList(){
+    public List<Patient> patientList() throws PatientNotFound {
         return patientService.getPatientsByAge();
     }
 
     @DeleteMapping("delete-patients")
-    public void deletePatients(@RequestBody DeletePatientRequest deletePatientRequest){
+    public void deletePatients(@RequestBody DeletePatientRequest deletePatientRequest) throws PatientNotFound {
         patientService.deletePatients(deletePatientRequest.getStartDate(), deletePatientRequest.getEndDate());
     }
 

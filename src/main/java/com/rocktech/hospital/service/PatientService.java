@@ -7,17 +7,14 @@ import java.io.IOException;
 import java.io.Writer;
 import java.sql.Date;
 import java.util.List;
-import java.util.Optional;
-
 
 public interface PatientService {
 
 
-    void deletePatients(Date startDate, Date endDate);
+    void deletePatients(Date startDate, Date endDate) throws PatientNotFound;
 
-    List<Patient> getPatientsByAge();
-
-    Optional<Patient> getPatientById(Long id);
+    List<Patient> getPatientsByAge() throws PatientNotFound;
 
     Patient writePatientToCsv(Writer writer, Long id) throws IOException, PatientNotFound;
+
 }
