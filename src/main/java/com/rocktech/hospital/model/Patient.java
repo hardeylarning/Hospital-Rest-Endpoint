@@ -18,6 +18,7 @@ import java.sql.Date;
 public class Patient {
 
     @Id
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

@@ -1,7 +1,6 @@
 package com.rocktech.hospital.controller;
 
 import com.rocktech.hospital.exception.StaffNotFound;
-import com.rocktech.hospital.model.Patient;
 import com.rocktech.hospital.model.Staff;
 import com.rocktech.hospital.payload.response.ResponseMessage;
 import com.rocktech.hospital.payload.response.StaffCreationResponse;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.ParseException;
 
 @RestController
 @RequestMapping("api/staff/")
